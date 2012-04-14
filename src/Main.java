@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileReader;
+
 import org.minijava.scanner.Scanner;
 
 import java_cup.runtime.Symbol;
@@ -14,7 +17,7 @@ public class Main {
 
 		try {
 			// Cria o Scanner para o arquivo
-			Scanner s = new Scanner(new java.io.StringReader("return a;"));
+			Scanner s = new Scanner(new FileReader(new File(args[0])));
 			Symbol t = s.next_token();
 			while (t.sym != sym.EOF) {
 				// Imprime cada token lido na tela
