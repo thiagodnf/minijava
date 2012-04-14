@@ -28,54 +28,85 @@ import org.minijava.throwables.*;
   }
 	
   // print out a symbol (aka token) nicely
-  public String symbolToString(Symbol s) {
-    switch (s.sym) {
-      case Sym.EQUAL: return "EQUAL";
-      case Sym.SEMICOLON: return "SEMICOLON";
-      case Sym.PLUS: return "PLUS";
-      case Sym.LPAREN: return "LPAREN";
-      case Sym.RPAREN: return "RPAREN";
-      case Sym.RETURN: return "RETURN";
-      case Sym.IDENTIFIER: return "ID(" + (String)s.value + ")";
-      case Sym.EOF: return "<EOF>";
-      case Sym.error: return "<ERROR>";
-      default: return "<UNEXPECTED TOKEN " + s.toString() + ">";
-    }
-  }
+	public String symbolToString(Symbol symbol) {
+		return Sym.toString(symbol);
+	}
   
 %}
 
 /* Helper definitions */
-letter = [a-zA-Z]
-digit = [0-9]
+LETRA = [a-zA-Z]
+DIGITO = [0-9]
 eol = [\r\n]
-white = {eol}|[ \t]
+WHITE = {eol}|[ \t]
+INTEGER_LITERAL = 0 | [1-9][0-9]*
+IDENTIFIER = {LETRA}({LETRA}|{DIGITO}|_)*
+
+COMMENT_FULL = "/*" [^*] ~"*/" | "/*" "*"+ "/" 
+COMMENT_SIMPLE = "//" [^*] {WHITE}?
+COMMENT = {COMMENT_FULL}|{COMMENT_SIMPLE}
 
 %%
-
 /* Token definitions */
 
-/* reserved words */
-/* (put here so that reserved words take precedence over identifiers) */
-"return" { return symbol(Sym.RETURN); }
+/* Palavras reservadas da linguagem */
+"return"			 { return symbol(Sym.WORD_RETURN); 	}
+"class"   			 { return symbol(Sym.WORD_CLASS); 	}
+"public"  			 { return symbol(Sym.WORD_PUBLIC); 	} 
+"static"  			 { return symbol(Sym.WORD_STATIC); 	}
+"void"    			 { return symbol(Sym.WORD_VOID); 	}
+"main"    			 { return symbol(Sym.WORD_MAIN);	}
+"extends" 			 { return symbol(Sym.WORD_EXTENDS); } 
+"this"				 { return symbol(Sym.WORD_THIS); 	}
+"new"				 { return symbol(Sym.WORD_NEW); 	}
+"length"			 { return symbol(Sym.WORD_LENGTH); 	}
+"System.out.println" { return symbol(Sym.WORD_PRINTLN); }
 
-/* operators */
-"+" { return symbol(Sym.PLUS); }
-"=" { return symbol(Sym.EQUAL); }
+/* Tipos de Dados*/
+"int"	  { return symbol(Sym.TYPE_INT);	}
+"boolean" { return symbol(Sym.TYPE_BOOL);	}
+"String"  { return symbol(Sym.TYPE_STRING);	}
 
-/* delimiters */
-"(" { return symbol(Sym.LPAREN); }
-")" { return symbol(Sym.RPAREN); }
-";" { return symbol(Sym.RPAREN); }
+/* Condicionais */
+"if"	{ return symbol(Sym.COND_IF);}
+"else"  { return symbol(Sym.COND_ELSE);}
+"while" { return symbol(Sym.COND_WHILE);}
 
-/* identifiers */
-{letter} ({letter}|{digit}|_)* { return symbol(Sym.IDENTIFIER, yytext()); }
+/* Valores Booleanos */
+"true"	{ return symbol(Sym.BOOL_TRUE);	 }
+"false" { return symbol(Sym.BOOL_FALSE); }
 
+/* Identificadores */
+{IDENTIFIER} 	  { return symbol(Sym.IDENTIFIER, yytext()); }
+{INTEGER_LITERAL} { return symbol(Sym.INTEGER_LITERAL, yytext()); }
 
-/* whitespace */
-{white}+ { /* ignore whitespace */ }
+/* Espaços em Branco */
+{WHITE}+ { /* Ignore os espaços em branco */ }
+
+/* Comentários */
+{COMMENT} { /* Ignore os comentários */ }
+
+/* Operadores */
+"+"  { return symbol(Sym.OP_PLUS);	}
+"-"	 { return symbol(Sym.OP_MINUS); }
+"="  { return symbol(Sym.OP_EQUAL); }
+"!"  { return symbol(Sym.OP_NOT);	}
+"*"	 { return symbol(Sym.OP_MULT);	}
+"&&" { return symbol(Sym.OP_AND);   }
+"<"  { return symbol(Sym.OP_LT);    }
+
+/* Separadores */
+"(" { return symbol(Sym.DEL_LPAREN); 	}
+")" { return symbol(Sym.DEL_RPAREN); 	}
+";" { return symbol(Sym.DEL_SEMICOLON); }
+"," { return symbol(Sym.DEL_COMMA);		}
+"." { return symbol(Sym.DEL_DOT); 		}
+"{" { return symbol(Sym.DEL_LBRACE); 	}
+"}" { return symbol(Sym.DEL_RBRACE); 	}  
+"[" { return symbol(Sym.DEL_LBRACK); 	}   
+"]" { return symbol(Sym.DEL_RBRACK); 	}
 
 /* lexical errors (put last so other matches take precedence) */
 . { 
-	throw new LexicalException("Caracter Invalido: '"+yytext()+"'");	
+	throw new LexicalException("Invalid Character: '"+yytext()+"'");	
 }
