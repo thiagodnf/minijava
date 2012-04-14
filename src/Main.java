@@ -9,25 +9,34 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println("Starting...");
+		showHeader();
+		System.out.println("Iniciando...");
 
 		try {
-			//Cria o Scanner para o arquivo
-			Scanner s = new Scanner(new java.io.StringReader("return a;d"));
+			// Cria o Scanner para o arquivo
+			Scanner s = new Scanner(new java.io.StringReader("return a;"));
 			Symbol t = s.next_token();
 			while (t.sym != sym.EOF) {
-				//Imprime cada token lido na tela
+				// Imprime cada token lido na tela
 				System.out.print(s.symbolToString(t) + " ");
 				t = s.next_token();
 			}
-			System.out.print("\nLexical analysis successfull");
+			System.out.println("\nAnálise Léxica terminou com sucesso!");
 		} catch (Exception e) {
-			System.out.println();
-			// Some kind of error in the compiler implementation that we're not expecting (a bug!)
+			//Quando algum caracter inválido foi encontrado
+			System.out.println();			
 			System.err.println("Compiler Error:");
 			e.printStackTrace();
 		}
-
 	}
 
+	private static void showHeader(){
+		System.out.println(
+			"==========================================="	+ "\n"+
+			"Compilador para a linguagem MiniJava"			+ "\n"+
+			"Versão:  1.0" 			   						+ "\n"+
+			"Autores: Débora Martins e Thiago Nascimento" 	+ "\n"+			
+			"==========================================="					
+		);
+	}
 }
