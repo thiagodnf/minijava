@@ -2,7 +2,6 @@ package org.minijava.scanner;
 
 import java_cup.sym;
 import java_cup.runtime.*;
-import org.minijava.symbol.*;
 import org.minijava.throwables.*;
 
 %%
