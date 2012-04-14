@@ -37,17 +37,19 @@ import org.minijava.throwables.*;
 /* Helper definitions */
 LETRA = [a-zA-Z]
 DIGITO = [0-9]
-eol = [\r\n]
+eol = [\r|\n|\r\n]
 WHITE = {eol}|[ \t]
 INTEGER_LITERAL = 0 | [1-9][0-9]*
 IDENTIFIER = {LETRA}({LETRA}|{DIGITO}|_)*
 
-COMMENT_FULL = "/*" [^*] ~"*/" | "/*" "*"+ "/" 
-COMMENT_SIMPLE = "//" [^*] {WHITE}?
-COMMENT = {COMMENT_FULL}|{COMMENT_SIMPLE}
+/*Comentários alinhandos (um comentário dentro do outro) não são permitidos*/
+COMMENT_MULTILINE = "/*" [^*] ~"*/" | "/*" "*"+ "/"
+COMMENT_SIMPLELINE = "//"[^\r\n]* {eol}
+COMMENT = {COMMENT_MULTILINE}|{COMMENT_SIMPLELINE}
 
 %%
 /* Token definitions */
+
 
 /* Palavras reservadas da linguagem */
 "return"			 { return symbol(Sym.WORD_RETURN); 	}
@@ -107,6 +109,6 @@ COMMENT = {COMMENT_FULL}|{COMMENT_SIMPLE}
 "]" { return symbol(Sym.DEL_RBRACK); 	}
 
 /* lexical errors (put last so other matches take precedence) */
-. { 
+.|\n { 
 	throw new LexicalException("Invalid Character: '"+yytext()+"'");	
 }
