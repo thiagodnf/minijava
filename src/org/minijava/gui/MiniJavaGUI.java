@@ -46,7 +46,8 @@ public class MiniJavaGUI extends JFrame {
 				// btnFechar.setLocation(dimension.width-120-10,dimension.height-25-10);
 			}
 		});
-
+		
+		this.textAreaConsole.append("Seja bem vindo\n");
 	}
 
 	public void run() {

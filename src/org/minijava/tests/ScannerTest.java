@@ -1,21 +1,9 @@
 package org.minijava.tests;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-
-import javax.swing.JEditorPane;
+import java.io.*;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-
 import java_cup.runtime.Symbol;
-
 import org.minijava.scanner.Scanner;
-
 import JFlex.sym;
 
 public class ScannerTest {
@@ -48,23 +36,25 @@ public class ScannerTest {
 	}
 	
 	public void run(){
-		println("Iniciando...Scanner");
+		println("=========================");
+		println("Scanner: Starting");
 		try {
 			// Cria o Scanner para o arquivo
 			Scanner s = new Scanner(this.reader);
 			Symbol t = s.next_token();
 			while (t.sym != sym.EOF) {
 				// Imprime cada token lido na tela
-				print(s.symbolToString(t));
+				println("  "+s.symbolToString(t));
 				t = s.next_token();
 			}
-			println("\nAnálise Léxica terminou com sucesso!");
+			println("Scanner: Done.");
 		} catch (Exception e) {
 			//Quando algum caracter inválido foi encontrado
 			println("");
-			print("Compiler Error:");
-			print(e.getMessage());
+			println("Compiler Error:");
+			print("\t"+e.getMessage());
 		}
+		
 	}
 	
 	private void print(String stream){
