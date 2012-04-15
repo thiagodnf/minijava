@@ -1,23 +1,12 @@
 package org.minijava.gui;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.File;
-
-import java_cup.runtime.Symbol;
-
+import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.*;
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-
-import org.minijava.scanner.Scanner;
+import javax.swing.filechooser.FileFilter;
 import org.minijava.tests.ScannerTest;
-
-import JFlex.sym;
 
 public class MiniJavaGUI extends JFrame {
 
@@ -70,6 +59,12 @@ public class MiniJavaGUI extends JFrame {
 		menuItemNew.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N,java.awt.event.InputEvent.CTRL_MASK));
 		menuItemCompile.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R,java.awt.event.InputEvent.CTRL_MASK));
 		
+		menuItemOpen.addActionListener(new ActionListener(){			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				open();
+			}
+		});
 		menuItemNew.addActionListener(new ActionListener(){			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -125,19 +120,19 @@ public class MiniJavaGUI extends JFrame {
 		add(toolBar, BorderLayout.PAGE_START);
 	}
 	
-	private void addNewTab(String name){
+	private JTextArea addNewTab(String name){
 			
 		if(name.isEmpty())
 			name = JOptionPane.showInputDialog(this, "Filename:");
 		if(name == null)
-			return;
+			return null;
 		
 		JTextArea textArea = new JTextArea(5, 20);
 		textArea.setTabSize(4);
 		textArea.setFont(new Font("Arial",0, 14));
 		textArea.setSize(10,100);
 		JScrollPane scrollPane = new JScrollPane(textArea);
-		tabPaneCode.addTab(name+".java", scrollPane);
+		tabPaneCode.addTab(name, scrollPane);
 		tabPaneCode.setSelectedIndex(tabPaneCode.getComponentCount()-1);
 		textArea.requestFocusInWindow();
 		tabPaneCode.addMouseListener(new MouseListener() {
@@ -176,14 +171,14 @@ public class MiniJavaGUI extends JFrame {
 				
 			}
 		});
+		return textArea;
 	}
 	
 	private void codeArea() {
 		tabPaneCode = new JTabbedPane();	
 		tabPaneConsole = new JTabbedPane();
-		addNewTab("code");		
-		//this.add(tabPane);
-		
+		addNewTab("file1.java");		
+				
 		textAreaConsole = new JTextArea(5,20);
 		textAreaConsole.setEditable(false);
 		textAreaConsole.setTabSize(4);		
@@ -201,6 +196,47 @@ public class MiniJavaGUI extends JFrame {
 		ScannerTest scanner = new ScannerTest(getSelectedTab().getText());
 		scanner.setConsole(textAreaConsole);
 		scanner.run();
+	}
+	
+	private void open(){
+		JFileChooser chooser = new JFileChooser();
+	   
+		FileFilter filter = new FileFilter() {			
+			@Override
+			public String getDescription() {
+				// TODO Auto-generated method stub
+				return null;
+			}			
+			@Override
+			public boolean accept(File file) {
+				String filename = file.getName();
+				return filename.endsWith("*.java");
+			}
+		};
+	    chooser.setFileFilter(filter);
+	    chooser.setDialogTitle("Open file");
+	    
+	    int returnVal = chooser.showOpenDialog(this);
+	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+	    	try {
+				openFile(chooser.getSelectedFile());
+			}catch (IOException e) {
+				e.printStackTrace();
+			}	       
+	    }
+	}
+	
+	private void openFile(File file) throws IOException{
+		JTextArea textArea = addNewTab(file.getName());
+		FileReader reader = new FileReader(file);
+        BufferedReader bufRdr = new BufferedReader(reader);
+        
+        String line = null;
+        while ((line = bufRdr.readLine()) != null){
+        	textArea.append(line);
+        	textArea.append("\n");
+        }
+        bufRdr.close();
 	}
 	
 	private void about(){
