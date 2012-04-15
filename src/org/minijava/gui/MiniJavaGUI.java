@@ -23,6 +23,7 @@ public class MiniJavaGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	private String version = "1.0";
 	private JTabbedPane tabPaneCode = null;
 	private JTabbedPane tabPaneConsole = null;
 	private JTextArea textAreaConsole = null;
@@ -58,14 +59,16 @@ public class MiniJavaGUI extends JFrame {
 	private void menuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menuFile = new JMenu("File");
+		JMenu menuCode = new JMenu("Code");
 		JMenu menuSobre = new JMenu("Sobre");
 		JMenuItem menuItemOpen = new JMenuItem("Open");
 		JMenuItem menuItemNew = new JMenuItem("New");
 		JMenuItem menuItemExit = new JMenuItem("Exit");
 		JMenuItem menuItemSobre = new JMenuItem("Sobre");
+		JMenuItem menuItemCompile = new JMenuItem("Compile");
 		
 		menuItemNew.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N,java.awt.event.InputEvent.CTRL_MASK));
-		menuItemExit.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q,java.awt.event.InputEvent.CTRL_MASK));
+		menuItemCompile.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R,java.awt.event.InputEvent.CTRL_MASK));
 		
 		menuItemNew.addActionListener(new ActionListener(){			
 			@Override
@@ -73,15 +76,34 @@ public class MiniJavaGUI extends JFrame {
 				addNewTab("");				
 			}
 		});
-
+		menuItemExit.addActionListener(new ActionListener(){			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
+		menuItemCompile.addActionListener(new ActionListener(){			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				compile();
+			}
+		});
+		menuItemSobre.addActionListener(new ActionListener(){			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				about();
+			}
+		});
 		
 		menuFile.add(menuItemNew);
 		menuFile.add(menuItemOpen);
 		menuFile.addSeparator();
 		menuFile.add(menuItemExit);
+		menuCode.add(menuItemCompile);
 		menuSobre.add(menuItemSobre);
 		
 		menuBar.add(menuFile);
+		menuBar.add(menuCode);
 		menuBar.add(menuSobre);
 		this.setJMenuBar(menuBar);
 	}
@@ -90,12 +112,10 @@ public class MiniJavaGUI extends JFrame {
 		JToolBar toolBar = new JToolBar("Menu");
 
 		// first button
-		JButton button = new JButton("Run");
+		JButton button = new JButton("Compile");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ScannerTest scanner = new ScannerTest(getSelectedTab().getText());
-				scanner.setConsole(textAreaConsole);
-				scanner.run();				
+				compile();			
 			}
 		});
 		button.setToolTipText("Clique aqui para compilar o código corrente");
@@ -175,6 +195,18 @@ public class MiniJavaGUI extends JFrame {
 		Container container = this.getContentPane();		
 		container.add(tabPaneCode, BorderLayout.CENTER);
 		container.add(tabPaneConsole, BorderLayout.LINE_END);			
+	}
+	
+	private void compile(){
+		ScannerTest scanner = new ScannerTest(getSelectedTab().getText());
+		scanner.setConsole(textAreaConsole);
+		scanner.run();
+	}
+	
+	private void about(){
+		String authors = "Autores:\n  Débora Martins\n  Thiago Nascimento";
+		String version = "Version:\n  "+this.version;
+		JOptionPane.showMessageDialog(this,"MiniJava\n\n"+authors+"\n\n"+version);
 	}
 	
 	private JTextArea getSelectedTab(){
