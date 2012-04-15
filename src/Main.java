@@ -1,10 +1,7 @@
 import java.io.File;
-import java.io.FileReader;
 
-import org.minijava.scanner.Scanner;
-
-import java_cup.runtime.Symbol;
-import JFlex.*;
+import org.minijava.gui.MiniJavaGUI;
+import org.minijava.tests.ScannerTest;
 
 public class Main {
 
@@ -12,34 +9,24 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		showHeader();
-		System.out.println("Iniciando...");
-
-		try {
-			// Cria o Scanner para o arquivo
-			Scanner s = new Scanner(new FileReader(new File(args[0])));
-			Symbol t = s.next_token();
-			while (t.sym != sym.EOF) {
-				// Imprime cada token lido na tela
-				System.out.print(s.symbolToString(t) + " ");
-				t = s.next_token();
-			}
-			System.out.println("\nAnálise Léxica terminou com sucesso!");
-		} catch (Exception e) {
-			//Quando algum caracter inválido foi encontrado
-			System.out.println();			
-			System.err.println("Compiler Error:");
-			e.printStackTrace();
+		header();
+		
+		if(args[0].equals("-gui")){
+			
+		}else if(args[0].equals("-d")){
+			ScannerTest scanner = new ScannerTest(new File(args[1]));
+			scanner.run();
+		}else{
+			MiniJavaGUI gui = new MiniJavaGUI();
+			gui.run();
 		}
 	}
 
-	private static void showHeader(){
-		System.out.println(
-			"==========================================="	+ "\n"+
-			"Compilador para a linguagem MiniJava"			+ "\n"+
-			"Versão:  1.0" 			   						+ "\n"+
-			"Autores: Débora Martins e Thiago Nascimento" 	+ "\n"+			
-			"==========================================="					
-		);
+	private static void header() {
+		System.out.println("===========================================");
+		System.out.println("Compilador para a linguagem MiniJava");
+		System.out.println("Versão:  1.0");
+		System.out.println("Autores: Débora Martins e Thiago Nascimento");
+		System.out.println("===========================================");
 	}
 }

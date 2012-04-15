@@ -44,7 +44,7 @@ IDENTIFIER = {LETRA}({LETRA}|{DIGITO}|_)*
 
 /*Comentários alinhandos (um comentário dentro do outro) não são permitidos*/
 COMMENT_MULTILINE = "/*" [^*] ~"*/" | "/*" "*"+ "/"
-COMMENT_SIMPLELINE = "//"[^\r\n]* {eol}
+COMMENT_SIMPLELINE = "//" [^\r\n]* {eol}
 COMMENT = {COMMENT_MULTILINE}|{COMMENT_SIMPLELINE}
 
 %%
