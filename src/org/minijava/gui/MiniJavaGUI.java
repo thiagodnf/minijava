@@ -26,23 +26,13 @@ public class MiniJavaGUI extends JFrame {
 		menuBar();
 		toolBar();
 		codeArea();
-
-		this.addComponentListener(new java.awt.event.ComponentAdapter() {
-			public void componentResized(java.awt.event.ComponentEvent e) {
-				// Dimension dimension = jpanel.getSize();
-				// scrollPane.setSize(dimension.width-20,dimension.height-200);
-				// scrollPaneConsole.setSize(dimension.width-20,dimension.height-50);
-				// textArea.setSize(dimension.width-20,dimension.height-100);
-				// btnFechar.setLocation(dimension.width-120-10,dimension.height-25-10);
-			}
-		});
+		consoleArea();
 		
 		this.textAreaConsole.append("Seja bem vindo\n");
 	}
 
 	public void run() {
-		setVisible(true);
-		//compile();
+		setVisible(true);		
 	}
 
 	private void menuBar() {
@@ -106,17 +96,17 @@ public class MiniJavaGUI extends JFrame {
 	private void toolBar() {
 		JToolBar toolBar = new JToolBar("Menu");
 
-		// first button
-		JButton button = new JButton("Compile");
-		button.addActionListener(new ActionListener() {
+		JButton buttonCompile = new JButton("Compile");
+		buttonCompile.setToolTipText("Clique aqui para compilar o código corrente");
+		buttonCompile.setIcon(new ImageIcon("lib/images/run-20.png"));
+		
+		buttonCompile .addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				compile();			
 			}
 		});
-		button.setToolTipText("Clique aqui para compilar o código corrente");
-		button.setIcon(new ImageIcon("lib/images/run-20.png"));
-		toolBar.add(button);
-		toolBar.setFloatable(false);
+		
+		toolBar.add(buttonCompile );
 		add(toolBar, BorderLayout.PAGE_START);
 	}
 	
@@ -174,11 +164,7 @@ public class MiniJavaGUI extends JFrame {
 		return textArea;
 	}
 	
-	private void codeArea() {
-		tabPaneCode = new JTabbedPane();	
-		tabPaneConsole = new JTabbedPane();
-		addNewTab("file1.java");		
-				
+	private void consoleArea(){
 		textAreaConsole = new JTextArea(5,20);
 		textAreaConsole.setEditable(false);
 		textAreaConsole.setTabSize(4);		
@@ -186,6 +172,12 @@ public class MiniJavaGUI extends JFrame {
 		textAreaConsole.setSize(100,100);
 		JScrollPane scrollPane = new JScrollPane(textAreaConsole);
 		tabPaneConsole.addTab("Console", scrollPane);
+	}
+	
+	private void codeArea() {
+		tabPaneCode = new JTabbedPane();	
+		tabPaneConsole = new JTabbedPane();
+		addNewTab("file1.java");	
 				
 		Container container = this.getContentPane();		
 		container.add(tabPaneCode, BorderLayout.CENTER);

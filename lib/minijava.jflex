@@ -35,21 +35,21 @@ import org.minijava.throwables.*;
 %}
 
 /* Helper definitions */
-LETRA = [a-zA-Z]
-DIGITO = [0-9]
+LETTER = [a-zA-Z]
+DIGIT = [0-9]
 eol = [\r|\n|\r\n]
 WHITE = {eol}|[ \t]
 INTEGER_LITERAL = 0 | [1-9][0-9]*
-IDENTIFIER = {LETRA}({LETRA}|{DIGITO}|_)*
+IDENTIFIER = {LETTER}({LETTER}|{DIGIT}|_)*
 
 /*Comentários alinhandos (um comentário dentro do outro) não são permitidos*/
 COMMENT_MULTILINE = "/*" [^*] ~"*/" | "/*" "*"+ "/"
-COMMENT_SIMPLELINE = "//" [^\r\n]* {eol}
-COMMENT = {COMMENT_MULTILINE}|{COMMENT_SIMPLELINE}
+COMMENT_SIMPLELINE = "//" [^\r\n]* {eol}?
+COMMENT_DOCUMENTATION = "/*" "*"+ [^/*] ~"*/"
+COMMENT = {COMMENT_MULTILINE}|{COMMENT_SIMPLELINE}|{COMMENT_DOCUMENTATION}
 
 %%
 /* Token definitions */
-
 
 /* Palavras reservadas da linguagem */
 "return"			 { return symbol(Sym.WORD_RETURN); 	}
@@ -87,6 +87,8 @@ COMMENT = {COMMENT_MULTILINE}|{COMMENT_SIMPLELINE}
 
 /* Comentários */
 {COMMENT} { /* Ignore os comentários */ }
+
+
 
 /* Operadores */
 "+"  { return symbol(Sym.OP_PLUS);	}
