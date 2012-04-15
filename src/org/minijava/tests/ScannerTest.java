@@ -4,6 +4,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+import javax.swing.JEditorPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+
 import java_cup.runtime.Symbol;
 
 import org.minijava.scanner.Scanner;
@@ -13,6 +21,7 @@ import JFlex.sym;
 public class ScannerTest {
 	
 	private java.io.Reader reader;
+	private JTextArea console = null;
 	
 	/**
 	 * Construtor
@@ -34,23 +43,40 @@ public class ScannerTest {
 		}
 	}
 	
+	public void setConsole(JTextArea console){
+		this.console = console;
+	}
+	
 	public void run(){
-		System.out.println("Iniciando...Scanner");
+		println("Iniciando...Scanner");
 		try {
 			// Cria o Scanner para o arquivo
 			Scanner s = new Scanner(this.reader);
 			Symbol t = s.next_token();
 			while (t.sym != sym.EOF) {
 				// Imprime cada token lido na tela
-				System.out.print(s.symbolToString(t) + " ");
+				print(s.symbolToString(t));
 				t = s.next_token();
 			}
-			System.out.println("\nAnálise Léxica terminou com sucesso!");
+			println("\nAnálise Léxica terminou com sucesso!");
 		} catch (Exception e) {
 			//Quando algum caracter inválido foi encontrado
-			System.out.println();			
-			System.err.println("Compiler Error:");
-			e.printStackTrace();
+			println("");
+			print("Compiler Error:");
+			print(e.getMessage());
 		}
+	}
+	
+	private void print(String stream){
+		if(this.console == null){
+			System.out.print(stream + " ");
+		}else{	
+			console.append(stream);
+		}
+	}
+	
+	private void println(String stream){
+		print(stream);
+		print("\n");
 	}
 }

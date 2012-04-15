@@ -9,17 +9,24 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 
+import java_cup.runtime.Symbol;
+
 import javax.swing.*;
 import javax.swing.GroupLayout.Alignment;
 
+import org.minijava.scanner.Scanner;
 import org.minijava.tests.ScannerTest;
+
+import JFlex.sym;
 
 public class MiniJavaGUI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private JTabbedPane tabPane = null;	
-
+	private JTabbedPane tabPaneCode = null;
+	private JTabbedPane tabPaneConsole = null;
+	private JTextArea textAreaConsole = null;
+	
 	public MiniJavaGUI() {
 		this.setSize(800, 600);
 		this.setTitle("MiniJava");
@@ -44,6 +51,7 @@ public class MiniJavaGUI extends JFrame {
 
 	public void run() {
 		setVisible(true);
+		//compile();
 	}
 
 	private void menuBar() {
@@ -85,6 +93,7 @@ public class MiniJavaGUI extends JFrame {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ScannerTest scanner = new ScannerTest(getSelectedTab().getText());
+				scanner.setConsole(textAreaConsole);
 				scanner.run();				
 			}
 		});
@@ -107,10 +116,10 @@ public class MiniJavaGUI extends JFrame {
 		textArea.setFont(new Font("Arial",0, 14));
 		textArea.setSize(10,100);
 		JScrollPane scrollPane = new JScrollPane(textArea);
-		tabPane.addTab(name+".java", scrollPane);
-		tabPane.setSelectedIndex(tabPane.getComponentCount()-1);
+		tabPaneCode.addTab(name+".java", scrollPane);
+		tabPaneCode.setSelectedIndex(tabPaneCode.getComponentCount()-1);
 		textArea.requestFocusInWindow();
-		tabPane.addMouseListener(new MouseListener() {
+		tabPaneCode.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -147,16 +156,29 @@ public class MiniJavaGUI extends JFrame {
 			}
 		});
 	}
-
+	
 	private void codeArea() {
-		tabPane = new JTabbedPane();		
+		tabPaneCode = new JTabbedPane();	
+		tabPaneConsole = new JTabbedPane();
 		addNewTab("code");		
-		this.add(tabPane);				
+		//this.add(tabPane);
+		
+		textAreaConsole = new JTextArea(5,20);
+		textAreaConsole.setEditable(false);
+		textAreaConsole.setTabSize(4);		
+		textAreaConsole.setFont(new Font("Arial",0, 14));
+		textAreaConsole.setSize(100,100);
+		JScrollPane scrollPane = new JScrollPane(textAreaConsole);
+		tabPaneConsole.addTab("Console", scrollPane);
+				
+		Container container = this.getContentPane();		
+		container.add(tabPaneCode, BorderLayout.CENTER);
+		container.add(tabPaneConsole, BorderLayout.LINE_END);			
 	}
 	
 	private JTextArea getSelectedTab(){
-		int index = tabPane.getSelectedIndex();
-		JScrollPane scrollPane = (JScrollPane) tabPane.getComponentAt(index);
+		int index = tabPaneCode.getSelectedIndex();
+		JScrollPane scrollPane = (JScrollPane) tabPaneCode.getComponentAt(index);
 		JViewport viewport = scrollPane.getViewport(); 
 		return (JTextArea)viewport.getView();
 	}
