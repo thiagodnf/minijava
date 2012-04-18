@@ -24,8 +24,8 @@ public class MiniJavaGUI extends JFrame {
 		init();
 		menuBar();
 		toolBar();
-		codeArea();
-		consoleArea();
+		createCodeArea();
+		createConsoleArea();
 		
 		this.textAreaConsole.append("Seja bem vindo\n");
 	}
@@ -42,10 +42,12 @@ public class MiniJavaGUI extends JFrame {
 		JMenuItem menuItemOpen = new JMenuItem("Open");
 		JMenuItem menuItemNew = new JMenuItem("New");
 		JMenuItem menuItemExit = new JMenuItem("Exit");
+		JMenuItem menuItemClose = new JMenuItem("Close");
 		JMenuItem menuItemSobre = new JMenuItem("Sobre");
 		JMenuItem menuItemCompile = new JMenuItem("Compile");
 		
 		menuItemNew.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N,java.awt.event.InputEvent.CTRL_MASK));
+		menuItemClose.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q,java.awt.event.InputEvent.CTRL_MASK));
 		menuItemCompile.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R,java.awt.event.InputEvent.CTRL_MASK));
 		
 		menuItemOpen.addActionListener(new ActionListener(){			
@@ -58,6 +60,12 @@ public class MiniJavaGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				addNewTab("");				
+			}
+		});
+		menuItemClose.addActionListener(new ActionListener(){			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				close();
 			}
 		});
 		menuItemExit.addActionListener(new ActionListener(){			
@@ -82,7 +90,10 @@ public class MiniJavaGUI extends JFrame {
 		menuFile.add(menuItemNew);
 		menuFile.add(menuItemOpen);
 		menuFile.addSeparator();
+		menuFile.add(menuItemClose);
+		menuFile.addSeparator();
 		menuFile.add(menuItemExit);
+		
 		menuCode.add(menuItemCompile);
 		menuSobre.add(menuItemSobre);
 		
@@ -121,7 +132,7 @@ public class MiniJavaGUI extends JFrame {
 		textArea.setFont(new Font("Arial",0, 14));
 		textArea.setSize(10,100);
 		JScrollPane scrollPane = new JScrollPane(textArea);
-		tabPaneCode.addTab(name, scrollPane);
+		tabPaneCode.addTab(name+".java", scrollPane);
 		tabPaneCode.setSelectedIndex(tabPaneCode.getComponentCount()-1);
 		textArea.requestFocusInWindow();
 		tabPaneCode.addMouseListener(new MouseListener() {
@@ -135,35 +146,39 @@ public class MiniJavaGUI extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				if(arg0.getButton() == 3){
-					System.out.println(arg0.getComponent());
+					//System.out.println(arg0.getComponent());
 					JPopupMenu pop = new JPopupMenu("oi");
-					pop.add(new JMenuItem("Remove"));
+					JMenuItem menuItemRemove = new JMenuItem("Remove");
+					
+					menuItemRemove.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent arg1) {
+							close();								
+						}
+					});
+					
+					pop.add(menuItemRemove);
 					pop.show(arg0.getComponent(),arg0.getX(),arg0.getY());
 				}
 			}
 			
 			@Override
-			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			public void mouseExited(MouseEvent arg0) {				
 			}
 			
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			public void mouseEntered(MouseEvent arg0) {				
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		return textArea;
 	}
 	
-	private void consoleArea(){
+	private void createConsoleArea(){
 		textAreaConsole = new JTextArea(5,20);
 		textAreaConsole.setEditable(false);
 		textAreaConsole.setTabSize(4);		
@@ -171,12 +186,47 @@ public class MiniJavaGUI extends JFrame {
 		textAreaConsole.setSize(100,100);
 		JScrollPane scrollPane = new JScrollPane(textAreaConsole);
 		tabPaneConsole.addTab("Console", scrollPane);
+		
+		textAreaConsole.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				if(arg0.getButton() == 3){
+					JPopupMenu pop = new JPopupMenu("oi");
+					JMenuItem menuItemClear = new JMenuItem("Clear");
+					
+					menuItemClear.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent arg0) {
+							textAreaConsole.setText("");		
+						}
+					});
+					
+					pop.add(menuItemClear);					
+					pop.show(arg0.getComponent(),arg0.getX(),arg0.getY());
+				}
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+			}
+		});
 	}
 	
-	private void codeArea() {
+	private void createCodeArea() {
 		tabPaneCode = new JTabbedPane();	
 		tabPaneConsole = new JTabbedPane();
-		addNewTab("file1.java");	
+		addNewTab("untitled");	
 				
 		Container container = this.getContentPane();		
 		container.add(tabPaneCode, BorderLayout.CENTER);
@@ -189,6 +239,16 @@ public class MiniJavaGUI extends JFrame {
 		scanner.run();
 	}
 	
+	private void close(){
+		int index = tabPaneCode.getSelectedIndex();
+		String nameTab = tabPaneCode.getTitleAt(index);
+		if(index != -1){
+			int more = JOptionPane.showConfirmDialog(this, "Would you like to close '"+nameTab+"'?", "Close File",JOptionPane.YES_NO_OPTION);
+			if(more == JOptionPane.OK_OPTION)
+				tabPaneCode.remove(index);
+		}
+	}
+	
 	private void open(){
 		JFileChooser chooser = new JFileChooser();
 		
@@ -196,8 +256,7 @@ public class MiniJavaGUI extends JFrame {
 	    chooser.setCurrentDirectory(new File("."));
 		chooser.setDialogTitle("Open file");
 	    
-	    int returnVal = chooser.showOpenDialog(this);
-	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+	    if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 	    	try {
 				openFile(chooser.getSelectedFile());
 			}catch (IOException e) {
@@ -212,11 +271,10 @@ public class MiniJavaGUI extends JFrame {
         BufferedReader bufRdr = new BufferedReader(reader);
         
         String line = null;
-        while ((line = bufRdr.readLine()) != null){
-        	textArea.append(line);
-        	textArea.append("\n");
-        }
+        while ((line = bufRdr.readLine()) != null)
+        	textArea.append(line+"\n");
         bufRdr.close();
+        reader.close();
 	}
 	
 	private void about(){
