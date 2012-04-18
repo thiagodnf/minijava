@@ -3,31 +3,40 @@ package org.minijava.scanner;
 import java_cup.sym;
 import java_cup.runtime.*;
 import org.minijava.throwables.*;
+import org.minijava.util.*;
+import java.util.*;
+
 
 %%
 
 %public
 %final
 %class Scanner
-%yylexthrow MiniJavaException 
+/*%yylexthrow MiniJavaException */
 %unicode
 %cup
 %line
 %column
 
 %{
-  // note that these Symbol constructors are abusing the Symbol
-  // interface to use Symbol's left and right fields as line and column
-  // fields instead
-  
-  private Symbol symbol(int type) {
-    return new Symbol(type, yyline+1, yycolumn+1);
-  }
-  private Symbol symbol(int type, Object value) {
-    return new Symbol(type, yyline+1, yycolumn+1, value);
-  }
+	// note that these Symbol constructors are abusing the Symbol
+	// interface to use Symbol's left and right fields as line and column
+	// fields instead
+
+	private List<Log> log = new LinkedList<Log>();
 	
-  // print out a symbol (aka token) nicely
+	public List<Log> getLogs(){
+		return log;
+	}
+
+	private Symbol symbol(int type) {
+		return new Symbol(type, yyline+1, yycolumn+1);
+	}
+	private Symbol symbol(int type, Object value) {
+		return new Symbol(type, yyline+1, yycolumn+1, value);
+	}
+	
+ 	// print out a symbol (aka token) nicely
 	public String symbolToString(Symbol symbol) {
 		return Sym.toString(symbol);
 	}
@@ -70,17 +79,17 @@ COMMENT = {COMMENT_MULTILINE}|{COMMENT_SIMPLELINE}|{COMMENT_DOCUMENTATION}
 "String"  { return symbol(Sym.TYPE_STRING);	}
 
 /* Condicionais */
-"if"	{ return symbol(Sym.COND_IF);}
-"else"  { return symbol(Sym.COND_ELSE);}
+"if"	{ return symbol(Sym.COND_IF);	}
+"else"  { return symbol(Sym.COND_ELSE); }
 "while" { return symbol(Sym.COND_WHILE);}
 
 /* Valores Booleanos */
-"true"	{ return symbol(Sym.BOOL_TRUE);	 }
-"false" { return symbol(Sym.BOOL_FALSE); }
+"true"	{ return symbol(Sym.BOOL_LITERAL,new Boolean(true));  }
+"false" { return symbol(Sym.BOOL_LITERAL,new Boolean(false)); }
 
 /* Identificadores */
-{IDENTIFIER} 	  { return symbol(Sym.IDENTIFIER, yytext()); }
-{INTEGER_LITERAL} { return symbol(Sym.INTEGER_LITERAL, yytext()); }
+{IDENTIFIER} 	  { return symbol(Sym.IDENTIFIER, yytext()); 	  }
+{INTEGER_LITERAL} { return symbol(Sym.INTEGER_LITERAL, new Integer(yytext())); }
 
 /* Espaços em Branco */
 {WHITE}+ { /* Ignore os espaços em branco */ }
@@ -112,5 +121,5 @@ COMMENT = {COMMENT_MULTILINE}|{COMMENT_SIMPLELINE}|{COMMENT_DOCUMENTATION}
 
 /* lexical errors (put last so other matches take precedence) */
 .|\n { 
-	throw new LexicalException("Invalid Character: '"+yytext()+"'");	
+	log.add(new LexicalLog(yytext(),yyline,yycolumn));	
 }

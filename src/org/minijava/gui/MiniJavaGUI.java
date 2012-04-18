@@ -2,10 +2,9 @@ package org.minijava.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
 import java.io.*;
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.minijava.tests.ScannerTest;
 
 public class MiniJavaGUI extends JFrame {
@@ -192,21 +191,10 @@ public class MiniJavaGUI extends JFrame {
 	
 	private void open(){
 		JFileChooser chooser = new JFileChooser();
-	   
-		FileFilter filter = new FileFilter() {			
-			@Override
-			public String getDescription() {
-				// TODO Auto-generated method stub
-				return null;
-			}			
-			@Override
-			public boolean accept(File file) {
-				String filename = file.getName();
-				return filename.endsWith("*.java");
-			}
-		};
-	    chooser.setFileFilter(filter);
-	    chooser.setDialogTitle("Open file");
+		
+		chooser.setFileFilter(new FileNameExtensionFilter("MiniJava Files", "java"));	    
+	    chooser.setCurrentDirectory(new File("."));
+		chooser.setDialogTitle("Open file");
 	    
 	    int returnVal = chooser.showOpenDialog(this);
 	    if(returnVal == JFileChooser.APPROVE_OPTION) {

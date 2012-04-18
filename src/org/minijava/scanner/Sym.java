@@ -25,9 +25,8 @@ public class Sym implements sym {
 	public static final int COND_ELSE 		= 63;
 	public static final int COND_WHILE 		= 64;
 
-	public static final int BOOL_TRUE 		= 65;
-	public static final int BOOL_FALSE		= 66;
-
+	public static final int BOOL_LITERAL 	= 65;
+	
 	public static final int IDENTIFIER 		= 67;
 	public static final int INTEGER_LITERAL = 68;
 
@@ -67,11 +66,10 @@ public class Sym implements sym {
 			case TYPE_STRING: 	  return "<STRING>";
 			case COND_IF:		  return "<IF>";
 			case COND_ELSE: 	  return "<ELSE>";
-			case COND_WHILE: 	  return "<WHILE>";
-			case BOOL_TRUE: 	  return "<TRUE>";
-			case BOOL_FALSE: 	  return "<FALSE>";
+			case COND_WHILE: 	  return "<WHILE>";			
 			case IDENTIFIER: 	  return "<ID("+(String)symbol.value+")>";
-			case INTEGER_LITERAL: return "<INT("+(String)symbol.value+")>";
+			case INTEGER_LITERAL: return "<INT("+symbol.value.toString()+")>";
+			case BOOL_LITERAL: 	  return "<BOOL("+symbol.value.toString()+")>";
 			case OP_PLUS: 		  return "<PLUS>";
 			case OP_MINUS: 		  return "<MINUS>";
 			case OP_EQUAL: 	   	  return "<EQUAL>";
