@@ -32,8 +32,6 @@ public class MiniJava {
 		try {
 			CommandLine cmd = parser.parse(options, args);	
 			
-			printHeader();
-			
 			if (cmd.hasOption("d")){
 				code = new File(cmd.getOptionValue("d"));
 			}
@@ -41,11 +39,16 @@ public class MiniJava {
 				printVersion();
 			}
 			if (cmd.hasOption("gui")){
+				printHeader();
 				MiniJavaGUI gui = new MiniJavaGUI(code);
 				gui.run();
 			}else{
-				ScannerTest scanner = new ScannerTest(code);
-				scanner.run();
+				if( code != null){
+					printHeader();
+					ScannerTest scanner = new ScannerTest(code);
+					scanner.run();
+				}else
+					throw new ParseException("");
 			}	
 		} catch (ParseException e) {
 			HelpFormatter formatter = new HelpFormatter();
