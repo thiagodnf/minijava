@@ -10,7 +10,7 @@ Como usar:
 -----------
 1. Baixe o arquivo `MiniJava.jar` disponibilizado na pasta "jar" do projeto.
     - Linux:
-        - Compilar via console `java -jar MiniJava.jar -d PATH`
+        - Compilar via console `java -jar MiniJava.jar -c -d PATH`
         - Executar interface gráfica `java -jar MiniJava.jar -gui`
         - Abrir arquivo na interface gráfica `java -jar MiniJava.jar -gui -d PATH`        
 

@@ -5,28 +5,26 @@ import org.apache.commons.cli.*;
 
 public class MiniJava {
 
-	private static void printHeader() {
-		System.out.println("===========================================");
-		System.out.println("MiniJava Compiler");
-		System.out.println("Version:  1.0");
-		System.out.println("Authors: Débora Martins e Thiago Nascimento");
-		System.out.println("===========================================");
-		System.out.println("Welcome");
+	private static void printVersion(){
+		System.out.println("This is MiniJava Compiler 1.0");
 	}
 	
-	private static void printVersion(){
-		System.out.println("MiniJava Compiler Version: 1.0");
+	private static void printAbout(){
+		System.out.println("MiniJava Compiler 1.0");
+		System.out.println("By Débora Martins and Thiago Nascimento");						
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Options options = new Options();
 		File code = null;
-		options.addOption("gui", false, "Load Graphics Interface");
-		options.addOption("d", true, "Code's path");
-		options.addOption("v", false, "MiniJava Compiler Version");
+		Options options = new Options();		
+		options.addOption("c","console",false, "MODE: Console Application Mode");
+		options.addOption("gui", false, "MODE: GUI Application Mode");
+		options.addOption("d","directory", true, "File Directory");
+		options.addOption("v","version", false, "Print the Version Information");
+		options.addOption("a","about", false, "About the MiniJava Compiler");
 
 		CommandLineParser parser = new PosixParser();
 		try {
@@ -38,21 +36,22 @@ public class MiniJava {
 			if(cmd.hasOption("v")){
 				printVersion();
 			}
+			if(cmd.hasOption("a")){
+				printAbout();
+			}
 			if (cmd.hasOption("gui")){
-				printHeader();
 				MiniJavaGUI gui = new MiniJavaGUI(code);
 				gui.run();
-			}else{
+			}else if(cmd.hasOption("c")){
 				if( code != null){
-					printHeader();
 					ScannerTest scanner = new ScannerTest(code);
 					scanner.run();
-				}else
-					throw new ParseException("");
-			}	
+				}
+			}else
+				throw new ParseException("");				
 		} catch (ParseException e) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("MiniJava Compiler",options);
+			formatter.printHelp("MiniJava.jar <mode> <option>",options);
 		}				
 	}
 
