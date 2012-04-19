@@ -6,6 +6,11 @@ Descrição:
 -----------
 Como trabalho final da disciplina de Compiladores, foi desenvolvido um compilador para a linguagem MiniJava utilizando algumas ferramentas como o JFLEX e o CUP para fazer o parseamento do código. Para facilitar o acesso do desenvolvedor a linguagem, foi desenvolvido uma pequena IDE para ter agilidade na escrita e compilação do código.
 
+Equipe:
+-----------
+- Débora Martins
+- Thiago Nascimento
+
 Como usar:
 -----------
 1. Baixe o arquivo `MiniJava.jar` disponibilizado na pasta "jar" do projeto.
