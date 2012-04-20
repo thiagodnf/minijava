@@ -6,7 +6,7 @@
 #
 # By Thiago Nascimento
 
-OUTPUT = "../src/org/minijava/scanner"
+OUTPUT = "../scanner"
 
 all:
 	jflex --nobak -d $(OUTPUT) minijava.jflex

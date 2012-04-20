@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="lib/CUP.jar"/>
 	<classpathentry kind="lib" path="lib/JFlex.jar"/>
 	<classpathentry kind="con" path="org.dyno.visual.swing.VS_LIBRARY/layoutext"/>
+	<classpathentry kind="lib" path="/home/thiagodnf/Dropbox/Projetos/Java/MiniJava/lib/commons-cli-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

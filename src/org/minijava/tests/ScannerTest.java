@@ -12,7 +12,7 @@ import JFlex.sym;
 
 public class ScannerTest {
 
-	private java.io.Reader reader;
+	private Reader reader;
 	private JTextArea console = null;
 
 	/**
@@ -70,12 +70,12 @@ public class ScannerTest {
 	}
 
 	private void print(String stream) {
-		if (this.console == null) {
+		if (this.console == null) {			
 			System.out.print(stream + " ");
-		} else {
+		}else{
 			console.append(stream);
 			console.setCaretPosition(console.getText().length());
-		}
+		}		
 	}
 
 	private void println(String stream) {
