@@ -1,0 +1,194 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>thiagodnf.minijava</groupId>
+	<artifactId>minijava</artifactId>
+	<version>2.0.0</version>
+	<name>MiniJava</name>
+	<description>A MiniJava Compiler</description>
+	<url>https://github.com/thiagodnf/minijava</url>
+	<properties>
+		<java.version>1.8</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<main.class>thiagodnf.minijava.Launcher</main.class>
+	</properties>
+	<developers>
+		<developer>
+			<name>Thiago Ferreira</name>
+			<url>https://github.com/thiagodnf</url>
+		</developer>
+		<developer>
+			<name>Débora Martins</name>
+			<url>https://github.com/dehvmartins</url>
+		</developer>
+	</developers>
+	<dependencies>
+		<dependency>
+			<groupId>thiagodnf.minijava.lib</groupId>
+			<artifactId>CUP</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/CUP.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>thiagodnf.minijava.lib</groupId>
+			<artifactId>JFlex</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/JFlex.jar</systemPath>
+		</dependency>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+		<!-- A simple library to customize the OS X menu bar  -->
+		<dependency>
+			<groupId>de.codecentric.centerdevice</groupId>
+			<artifactId>centerdevice-nsmenufx</artifactId>
+			<version>2.1.6</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.zenjava</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>8.8.3</version>
+				<configuration>
+					<appName>${project.name}</appName>
+					<title>${project.name}</title>
+        			<description>${project.description}</description>
+        			<needMenu>true</needMenu>
+					<vendor>${project.groupId}</vendor>
+					<!-- executable JAR file is built by default (not optional at this stage) -->
+					<mainClass>${main.class}</mainClass>
+					<!-- optionally build webstart bundle -->
+					<webstart>
+						<requiresAllPermissions>true</requiresAllPermissions>
+					</webstart>
+					<!-- optionally build native installers -->
+					<nativeInstallers />
+					<bundleArguments>
+			            <icon.ico>${project.basedir}/src/main/resources/images/icon.ico</icon.ico>
+			            <icon.png>${project.basedir}/src/main/resources/images/icon.png</icon.png>
+			            <icon.icns>${project.basedir}/src/main/resources/images/Icon.icns</icon.icns>
+			        </bundleArguments>
+			        <!-- optionally override settings (such as jar file name, html file, etc) -->
+					<jarFileName>${project.artifactId}.jar</jarFileName>
+			        <jfxMainAppJarName>${project.artifactId}.jar</jfxMainAppJarName>
+				</configuration>
+			</plugin>
+			<!-- Define the name used to define the eclipse project -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<!-- or whatever version you use -->
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+			<!-- Generate a jar file with source code -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Generate java with dependencies -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>${main.class}</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<appendAssemblyId>false</appendAssemblyId>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>windows-profile</id>
+			<activation>
+				<os>
+					<family>windows</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.apple.eawt</groupId>
+					<artifactId>eawt</artifactId>
+					<version>1.4</version>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>unix-profile</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>com.apple.eawt</groupId>
+					<artifactId>eawt</artifactId>
+					<version>1.4</version>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+	<repositories>
+		<!-- In Project Repository -->
+		<repository>
+			<id>in-project</id>
+			<name>In Project Repository</name>
+			<url>file://${project.basedir}/lib</url>
+		</repository>
+	</repositories>
+</project>
