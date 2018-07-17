@@ -7,8 +7,11 @@ MiniJava Compiler Powered by JavaFX
 
 Como trabalho final da disciplina de Compiladores, foi desenvolvido um compilador para a linguagem MiniJava utilizando algumas ferramentas como o JFLEX e o CUP para fazer o parseamento do código. Para facilitar o acesso do desenvolvedor a linguagem, foi desenvolvido uma pequena IDE para ter agilidade na escrita e compilação do código.
 
-Equipe:
------------
+# Screenshot
+
+<img src="https://raw.githubusercontent.com/thiagodnf/minijava/master/src/main/resources/images/screenshot.png" />
+
+# Team
 - Débora Martins
 - Thiago Nascimento
 
