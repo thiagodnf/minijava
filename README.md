@@ -1,9 +1,10 @@
-MiniJava - Compilador
-======
-Compilador desenvolvido em Java para a linguagem MiniJava.
+<img src="https://raw.githubusercontent.com/thiagodnf/minijava/master/src/main/resources/images/name.png" />
 
-Descrição:
------------
+MiniJava Compiler Powered by JavaFX
+
+
+# Description
+
 Como trabalho final da disciplina de Compiladores, foi desenvolvido um compilador para a linguagem MiniJava utilizando algumas ferramentas como o JFLEX e o CUP para fazer o parseamento do código. Para facilitar o acesso do desenvolvedor a linguagem, foi desenvolvido uma pequena IDE para ter agilidade na escrita e compilação do código.
 
 Equipe:
