@@ -19,6 +19,12 @@ Como usar:
         - Executar interface gráfica `java -jar MiniJava.jar -gui`
         - Abrir arquivo na interface gráfica `java -jar MiniJava.jar -gui -d PATH`        
 
+# Compile 
+
+```sh
+mvn clean compile jfx:jar jfx:native
+``
+
 ChangeLog:
 -----------
 - Versão 1.0
