@@ -2,6 +2,7 @@
 
 MiniJava Compiler Powered by JavaFX
 
+[![Build Status](https://travis-ci.org/thiagodnf/minijava.svg?branch=master)](https://travis-ci.org/thiagodnf/minijava)
 
 # Description
 
