@@ -23,11 +23,17 @@ public class Launcher extends Application {
 
 	public static void main(String[] args) throws Exception {
 
-		LOGGER.info("Starting MiniJava");
+		LOGGER.info("====================================");
+		LOGGER.info("MiniJava");
+		LOGGER.info("====================================");
 		LOGGER.info("User Directory: {}", System.getProperty("user.dir"));
 		LOGGER.info("Operational System Name: {}", System.getProperty("os.name"));
 		LOGGER.info("Operational System Arch: {}", System.getProperty("os.arch"));
 		LOGGER.info("Operational System Version: {}", System.getProperty("os.version"));
+		LOGGER.info("Java Home: {}", System.getProperty("java.home"));
+		LOGGER.info("Java Vendor: {}", System.getProperty("java.vendor"));
+		LOGGER.info("Java Vendor URL: {}", System.getProperty("java.vendor.url"));
+		LOGGER.info("Java Version: {}", System.getProperty("java.version"));
 		
 		launch(args);
 	}
